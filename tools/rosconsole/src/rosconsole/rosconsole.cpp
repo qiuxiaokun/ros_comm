@@ -202,13 +202,20 @@ struct TimeToken : public Token
 {
   virtual std::string getString(void*, ::ros::console::Level, const char*, const char*, const char*, int)
   {
-    std::stringstream ss;
-    ss << ros::WallTime::now();
     if (ros::Time::isValid() && ros::Time::isSimTime())
     {
+      std::stringstream ss;
       ss << ", " << ros::Time::now();
+      return ss.str();
+    } else {
+      time_t t;
+      t = time(0);
+      char now[64];
+      struct tm *ttime;
+      ttime = localtime(&t);
+      strftime(now, 64, "%Y-%m-%d %H:%M:%S", ttime);
+      return now;
     }
-    return ss.str();
   }
 };
 
@@ -216,9 +223,13 @@ struct WallTimeToken : public Token
 {
   virtual std::string getString(void*, ::ros::console::Level, const char*, const char*, const char*, int)
   {
-    std::stringstream ss;
-    ss << ros::WallTime::now();
-    return ss.str();
+    time_t t;
+    t = time(0);
+    char now[64];
+    struct tm *ttime;
+    ttime = localtime(&t);
+    strftime(now, 64, "%Y-%m-%d %H:%M:%S", ttime);
+    return now;
   }
 };
 
