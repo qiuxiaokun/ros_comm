@@ -184,7 +184,8 @@ class RosStreamHandler(logging.Handler):
             'ROSCONSOLE_FORMAT', '[${severity}] [${time}]: ${message}')
         msg = msg.replace('${severity}', level)
         msg = msg.replace('${message}', str(record_message))
-        msg = msg.replace('${walltime}', '%f' % time.time())
+        # msg = msg.replace('${walltime}', '%f' % time.time())
+        msg = msg.replace('${walltime}', datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
         msg = msg.replace('${thread}', str(record.thread))
         msg = msg.replace('${logger}', str(record.name))
         msg = msg.replace('${file}', str(record.pathname))
@@ -196,7 +197,8 @@ class RosStreamHandler(logging.Handler):
         except ImportError:
             node_name = '<unknown_node_name>'
         msg = msg.replace('${node}', node_name)
-        time_str = '%f' % time.time()
+        # time_str = '%f' % time.time()
+        time_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         if self._get_time is not None and not self._is_wallclock():
             time_str += ', %f' % self._get_time()
         msg = msg.replace('${time}', time_str)
